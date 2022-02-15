@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Posts List
+{% endblock title %}
+{% block content%}
+    <div class="container-fostrap">
+        <div>
+            </div>
+                <div class="content">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {{ message.tags }} m-2 text-center" dir="ltr" id="msg" role="alert">
+                                {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    <div class="container">
+                        <div class="row">
+                        {% for post in posts %}
+                            <div class="my-2">
+                                <div class="card">
+                                    <div class="image">
+                                        <img src= "{{post.image.url}}" class="img-responsive"alt="nothig" class="card-img-top" >
+                                    </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{post.title}}</h5>
+                                    <p class="card-text">{{post.short_description}}</p>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a  class="col-md-12 btn btn-primary" href= "{% url 'post_detail' slug=post.slug %}">See more</a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                          <p class="card-text"><small class="text-muted">{{post.created_at}}</small></p>
+                                </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                                        {% endblock content %}

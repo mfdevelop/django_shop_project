@@ -1,0 +1,10 @@
+{% extends 'shop_managing_base.html' %}
+{% block title %}Edit Shop{% endblock title %}
+{% block body %}
+    <form method="post">
+    {% csrf_token %}
+        <p>{{ form.name }}</p>
+        <p>{{ form.type }}</p>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock body %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+    add post
+{% endblock title %}
+{% block content %}
+        <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }} m-2 text-center" dir="ltr" id="msg" role="alert">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+            <div class="col-md-9 my-3">
+                <form action="{% url 'add_post'  %}" method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <p class="tab-content"><b>post name</b> : {{form.title}}</p>
+                    <p class="tab-content"><b>short description</b> : {{form.short_description}}</p>
+                    <p class="tab-content"><b>upload image</b> : {{form.image}}</p>
+                    <p class="tab-content"><b>category name</b> : {{form.category}}</p>
+                    <p class="tab-content"><b>tags</b> : {{form.tag}}</p>
+                    <div class="d-flex justify-content-center mt-3 login_container">
+                        <input class="btn btn-primary" type="submit" value="add post">
+                    </div>
+                </form>
+            </div>
+        </div>
+{% endblock content %}

@@ -1,0 +1,166 @@
+{% extends 'shop_managing_base.html' %}
+{% block title %}Carts{% endblock title %}
+{% block JS %}
+    <script>
+
+        function ChangeStatus(status, cart_id , shop) {
+            const url = "{%  url 'change_status' 0 %}".replace('0', cart_id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {"status": status, 'cart_id': cart_id , 'shop':shop},
+
+                success: function (response) {
+                    // if not valid user, alert the user
+                    if (!response["valid"]) {
+                        alert(`cart status changed to ${status}`);
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+            $(document).ajaxStop(function(){
+                window.location.reload();
+            });
+        }
+
+        /*$("#id_nick_name").focusout(function (e) {
+            e.preventDefault();
+            // get the nickname
+            var nick_name = $(this).val();
+            // GET AJAX request
+            $.ajax({
+                type: 'GET',
+{#url: "{% url 'validate_nickname' %}",#}
+            data: {"nick_name": nick_name},
+            success: function (response) {
+                // if not valid user, alert the user
+                if(!response["valid"]){
+                    alert("You cannot create a friend with same nick name");
+                    var nickName = $("#id_nick_name");
+                    nickName.val("")
+                    nickName.focus()
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    })*/
+    </script>
+{% endblock JS %}
+{% block css_class_active_cart %}active{% endblock css_class_active_cart %}
+{% block body %}
+    <div id="container">
+        <div class="shell">
+            <!-- Small Nav -->
+            <div class="small-nav"><a href="#">Dashboard</a> <span>&gt;</span> Current Articles</div>
+            <!-- End Small Nav -->
+            <!-- Message OK -->
+            <div class="msg msg-ok">
+                <p><strong>Your file was uploaded succesifully!</strong></p>
+                <a href="#" class="close">close</a></div>
+            <!-- End Message OK -->
+            <!-- Message Error -->
+            <div class="msg msg-error">
+                <p><strong>You must select a file to upload first!</strong></p>
+                <a href="#" class="close">close</a></div>
+            <!-- End Message Error -->
+            <br/>
+            <!-- Main -->
+            <div id="main">
+                <div class="cl">&nbsp;</div>
+                <!-- Content -->
+                <div id="content">
+                    <!-- Box -->
+                    <div class="box">
+                        <!-- Box Head -->
+                        <div class="box-head">
+                            <h2 class="left">Carts</h2>
+                            <div class="right">
+                                <label>search carts</label>
+                                <input type="text" class="field small-field"/>
+                                <input type="submit" class="button" value="search"/>
+                            </div>
+                        </div>
+                        <!-- End Box Head -->
+                        <!-- Table -->
+                        <div class="table">
+                            <table>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Status</th>
+                                    <th>Last Change</th>
+                                </tr>
+                                {% for cart in carts %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'cart_details' pk=cart.pk %}">{{ cart.user.phone_number }}</a>
+                                        </td>
+                                        <td><a href="#">{{ cart.status }}</a>
+                                            <form action="">
+                                                <select name="customers"
+                                                        onchange="ChangeStatus(this.value , {{ cart.id }} , {{ shop }})">
+                                                    <option value="">select a status to change</option>
+                                                    <option value="in progress">in progress</option>
+                                                    <option value="accepted ">accepted</option>
+                                                    <option value="canceled">canceled</option>
+                                                    <option value="paid">paid</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td><a href="#">{{ cart.last_change }}</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <!-- Pagging
+                            <div class="pagging">
+                              <div class="left">Showing 1-12 of 44</div>
+                              <div class="right"> <a href="#">Previous</a> <a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">245</a> <span>...</span> <a href="#">Next</a> <a href="#">View all</a> </div>
+                            </div>
+                             End Pagging -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End Content -->
+                <!-- Sidebar -->
+                <div id="sidebar">
+                    <!-- Box -->
+                    <div class="box">
+                        <!-- Box Head -->
+                        <div class="box-head">
+                            <h2>Management</h2>
+                        </div>
+                        <!-- End Box Head-->
+{#                        <div class="box-content"><a href="{% url 'create_shop' %}"#}
+{#                                                    class="add-button"><span>Add new Shop</span></a>#}
+                            <!-- Sort -->
+                            {% comment %}<div class="sort">
+                                <label>Sort by</label>
+                                <select class="field">
+                                    <option value="">Title</option>
+                                </select>
+                                <select class="field">
+                                    <option value="">Date</option>
+                                </select>
+                                <select class="field">
+                                    <option value="">Author</option>
+                                </select>
+                            </div>{% endcomment %}
+                            <form method="get">
+                                {{ cartFilter.form.as_p }}
+                                <button type="submit">Filter</button>
+                            </form>
+                            <!-- End Sort -->
+                        </div>
+                    </div>
+                    <!-- End Box -->
+                </div>
+                <!-- End Sidebar -->
+                <div class="cl">&nbsp;</div>
+            </div>
+            <!-- Main -->
+        </div>
+    </div>
+{% endblock body %}

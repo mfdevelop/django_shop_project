@@ -1,0 +1,16 @@
+{% extends 'shop_managing_base.html' %}
+{% load widget_tweaks %}
+{% block title %}Add Product{% endblock title %}
+{% block body %}
+    <form method="post" action="{% url 'add_product' id=shop.id %}" enctype='multipart/form-data'>
+    {% csrf_token %}
+    <p>{{ product_form.name}}</p>
+    <p>{{ product_form.price }}</p>
+    <p>{{ product_form.count }}</p>
+    <p>{{ product_form.category }}</p>
+    <p>{{ product_form.main_image }}</p>
+    <p>{{ product_form.second_image }}</p>
+    <p>{{ product_form.third_image }}</p>
+    <input class="btn btn-primary" type="submit" value="add product">
+    </form>
+{% endblock body %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}
+{{post.title}} Details
+{% endblock title %}
+{% block content%}
+<section class="wrapper">
+    <div class="container-fostrap">
+        <div>
+            </div>
+                <div class="content">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {{ message.tags }} m-2 text-center" dir="rtl" id="msg" role="alert">
+                                {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 my-2">
+                                <div class="card">
+                                    <div class="image">
+                                        <img src= "{{post.image.url}}" class="img-responsive"alt="nothig" class="card-img-top" >
+                                    </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{post.title}}</h5>
+                                    <p class="card-text">{{post.short_description}}</p>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                          <p class="card-text"><small class="text-muted">{{post.created_at}}</small></p>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 bg-warning my-3">
+                                <div>
+                                {% with comments|first as comment %}
+                                    {{comment.comment_text}}
+                                {% endwith %}
+                                </div>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <a href="{% url 'post_comments' slug=post.slug %}" class="col-md-5 btn btn-primary">Show All Comments</a>
+                            </div>
+                        </div>
+                        <a class="btn btn-warning" href="{% url 'add_comment' slug=post.slug %}">افزودن نظر</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

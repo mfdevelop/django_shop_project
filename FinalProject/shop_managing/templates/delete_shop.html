@@ -1,0 +1,10 @@
+{% extends 'shop_managing_base.html' %}
+{% block title %}Delete Shop{% endblock title %}
+{% block body %}
+    <form action="{% url 'delete_shop' slug=shop.slug %}" method="post">
+        {% csrf_token %}
+        <p>Are you Sure You Want To Delete {{ shop.name }} Shop ?</p>
+        <p><a href="{% url 'panel' %}">No</a></p>
+        <input type="submit" value="yes">
+    </form>
+{% endblock body %}

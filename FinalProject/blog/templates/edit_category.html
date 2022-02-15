@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+    edit category
+{% endblock title %}
+{% block content %}
+        <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }} m-2 text-center" dir="ltr" id="msg" role="alert">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+            <div class="col-md-9 my-3">
+                <form action="{% url 'edit_category' id=category.id %}" method="POST">
+                    {% csrf_token %}
+                    <h3 class="alert-warning">edit category</h3>
+                    <br>
+                        {{form.name}}
+                        <i class="fas fa-edit"></i>
+                    <div class="d-flex justify-content-center mt-3 login_container">
+                        <input class="btn btn-primary " type="submit" value="edit category">
+                    </div>
+                </form>
+            </div>
+        </div>
+{% endblock content %}

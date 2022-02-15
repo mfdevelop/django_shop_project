@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {% block css %}{% endblock css %}
+    <title>{% block title %}{% endblock title %}</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="{% static 'shop_manager/css/style.css' %}" type="text/css" media="all"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- Header -->
+<div id="header">
+    <div class="shell">
+        <!-- Logo + Top Nav -->
+        <div id="top">
+            <h1><a href="#">Seller</a></h1>
+            <div id="top-navigation"> Welcome <a href="#"><strong>Administrator</strong></a> <span>|</span> <a href="#">Help</a>
+                <span>|</span> <a href="#">Profile Settings</a> <span>|</span> <a href="{% url 'shop_logout' %}">Log out</a></div>
+        </div>
+        <!-- End Logo + Top Nav -->
+        <!-- Main Nav -->
+        <div id="navigation">
+            <ul>
+                <li><a href="" class="{% block css_class_active_panel %}{% endblock css_class_active_panel %}"><span>panel</span></a>
+                </li>
+                <li><a href="#"><span>Products</span></a></li>
+                <li><a href="#" class="{% block css_class_active_cart %}{% endblock css_class_active_cart %}"><span>Carts</span></a>
+                </li>
+                <li><a href="#" class="{% block css_class_active_shop_page %}{% endblock css_class_active_shop_page %}"><span>Shop Page</span></a>
+                </li>
+            </ul>
+        </div>
+        <!-- End Main Nav -->
+    </div>
+</div>
+<!-- End Header -->
+<!-- Container -->
+{% block body %}{% endblock body %}
+{% block JS %}{% endblock JS %}
+<!-- End Container -->
+<!-- Footer -->
+<div id="footer">
+    <div class="shell"><span class="left">&copy; 2010 - CompanyName</span> <span class="right"> Design by <a
+            href="http://chocotemplates.com">Chocotemplates.com</a> </span></div>
+</div>
+<!-- End Footer -->
+<div align=center>This template downloaded form <a href='http://all-free-download.com/free-website-templates/'>free
+    website templates</a></div>
+</body>
+</html>

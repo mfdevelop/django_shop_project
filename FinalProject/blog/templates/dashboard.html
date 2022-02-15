@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ request.user }} dashboard
+{% endblock title %}
+{% block content %}
+    {% if posts %}
+        <div class="container-fostrap">
+            <div>
+                </div>
+                    <div class="content">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {{ message.tags }} m-2 text-center" dir="ltr" id="msg" role="alert">
+                                {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="container">
+                            <div class="row">
+                            {% if posts %}
+                                {% for post in posts %}
+                                    <div class="my-2 col-md-9">
+                                         <div class="card">
+                                                <div class="image">
+                                                    <img src= "{{post.image.url}}" class="img-responsive" alt="nothig" class="card-img-top" >
+                                                </div>
+                                         <div class="card-body">
+                                                <h5 class="card-title">{{post.title}}</h5>
+                                                <p class="card-text">{{post.short_description}}</p>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'edit_post' slug=post.slug %}" class="table-link">
+                                                            <span class="fa-stack">
+                                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                                <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                                            </span>
+                                                        </a>
+                                                        <a href="{% url 'delete_post' slug=post.slug %}" class="table-link danger">
+                                                            <span class="fa-stack">
+                                                                <i class="fa fa-square fa-stack-2x"></i>
+                                                                <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                                            </span>
+                                                        </a>
+                                                <a  class="col-md-12 btn btn-primary" href= "{% url 'post_detail' slug=post.slug %}">See more</a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                                  <p class="card-text"><small class="text-muted">{{post.created_at}}</small></p>
+                                         </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="my-2 col-md-9">
+                                    <a href="" class="btn btn-danger">add your first post</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock content %}
+{% block script %}
+    setTimeout(function() {
+        if ($('#msg').length > 0){
+            $('#msg').remove();
+        }
+    } , 2000)
+{% endblock script %}

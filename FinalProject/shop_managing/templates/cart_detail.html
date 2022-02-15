@@ -1,0 +1,62 @@
+{% extends 'shop_managing_base.html' %}
+{% block title %}Cart Detail{% endblock title %}
+{% block css_class_active_cart %}active{% endblock css_class_active_cart %}
+{% block body %}
+    <div id="main">
+        <div class="cl">&nbsp;</div>
+        <!-- Content -->
+        <div id="content">
+            <!-- Box -->
+            <div class="box">
+                <!-- Box Head -->
+                <div class="box-head">
+                    <h2 class="left">Cart Deatil</h2>
+                    <div class="right">
+                        <label>search shops</label>
+                        <input type="text" class="field small-field"/>
+                        <input type="submit" class="button" value="search"/>
+                    </div>
+                </div>
+                <!-- End Box Head -->
+                <!-- Table -->
+                <div class="table">
+                    <table>
+                        <tr>
+                            <th>Product</th>
+                            <th>Status</th>
+                            <th>Count</th>
+                        </tr>
+                        {% for cartItem in cartItems %}
+                            <tr>
+                                <td><a href="#">{{ cartItem.product }}</a></td>
+                                <td><a href="#">{{ cartItem.status }}</a></td>
+                                <td><a href="#">{{ cartItem.count }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <!-- Pagging
+                    <div class="pagging">
+                      <div class="left">Showing 1-12 of 44</div>
+                      <div class="right"> <a href="#">Previous</a> <a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">245</a> <span>...</span> <a href="#">Next</a> <a href="#">View all</a> </div>
+                    </div>
+                     End Pagging -->
+                </div>
+            </div>
+        </div>
+        <!-- End Content -->
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <!-- Box -->
+            <div class="box">
+                <!-- Box Head -->
+                <div class="box-head">
+                    <h2>Management</h2>
+                </div>
+                <!-- End Box Head-->
+            </div>
+            <!-- End Box -->
+        </div>
+        <!-- End Sidebar -->
+        <div class="cl">&nbsp;</div>
+    </div>
+{% endblock body %}

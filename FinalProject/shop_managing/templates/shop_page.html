@@ -1,0 +1,103 @@
+{% extends 'shop_managing_base.html' %}
+{% load widget_tweaks %}
+{% block title %}{{ shop.name }} page{% endblock title %}
+{% block css_class_active_shop_page %}active{% endblock css_class_active_shop_page %}
+{% block body %}
+<div id="container">
+    <div class="shell">
+        <!-- Small Nav -->
+        <div class="small-nav"><a href="#">Dashboard</a> <span>&gt;</span> Current Articles</div>
+        <!-- End Small Nav -->
+        <!-- Message OK -->
+        <div class="msg msg-ok">
+            <p><strong>Your file was uploaded succesifully!</strong></p>
+            <a href="#" class="close">close</a></div>
+        <!-- End Message OK -->
+        <!-- Message Error -->
+        <div class="msg msg-error">
+            <p><strong>You must select a file to upload first!</strong></p>
+            <a href="#" class="close">close</a></div>
+        <!-- End Message Error -->
+        <br/>
+        <!-- Main -->
+        <div id="main">
+            <div class="cl">&nbsp;</div>
+            <!-- Content -->
+            <div id="content">
+                <!-- Box -->
+                <div class="box">
+                    <!-- Box Head -->
+                <div class="box-head">
+                    <h2 class="left">{% render_field shop.name %} Products</h2>
+                    <div class="right">
+                        <label>search shops</label>
+                        <input type="text" class="field small-field"/>
+                        <input type="submit" class="button" value="search"/>
+                    </div>
+                </div>
+                    <!-- End Box Head -->
+                    <!-- Table -->
+                    <div class="table">
+                            <table>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Count</th>
+                                    <th>Category</th>
+                                    <th>Image</th>
+                                </tr>
+                                {% for product in products %}
+                                    <tr>
+                                    <td><h3><a href="#">{% render_field product.name %}</a></h3></td>
+                                    <td>{% render_field product.price %}</td>
+                                    <td>{% render_field product.count %}</td>
+                                    <td>{% render_field product.category %}</td>
+                                    <td><img src="{{ product.main_image.url }}"></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        <!-- Pagging
+                        <div class="pagging">
+                          <div class="left">Showing 1-12 of 44</div>
+                          <div class="right"> <a href="#">Previous</a> <a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">245</a> <span>...</span> <a href="#">Next</a> <a href="#">View all</a> </div>
+                        </div>
+                         End Pagging -->
+                    </div>
+                </div>
+            </div>
+            <!-- End Content -->
+            <!-- Sidebar -->
+            <div id="sidebar">
+                <!-- Box -->
+                <div class="box">
+                    <!-- Box Head -->
+                    <div class="box-head">
+                        <h2>Management</h2>
+                    </div>
+                    <!-- End Box Head-->
+                    <div class="box-content"><a href="{% url 'add_product' id=shop.id %}" class="add-button"><span>Add new Product</span></a>
+                        <!-- Sort -->
+                        <div class="sort">
+                            <label>Sort by</label>
+                            <select class="field">
+                                <option value="">Title</option>
+                            </select>
+                            <select class="field">
+                                <option value="">Date</option>
+                            </select>
+                            <select class="field">
+                                <option value="">Author</option>
+                            </select>
+                        </div>
+                        <!-- End Sort -->
+                    </div>
+                </div>
+                <!-- End Box -->
+            </div>
+            <!-- End Sidebar -->
+            <div class="cl">&nbsp;</div>
+        </div>
+        <!-- Main -->
+    </div>
+</div>
+{% endblock body %}

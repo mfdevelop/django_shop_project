@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    add comment
+{% endblock title %}
+{% block content %}
+        <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }} m-2 text-center" dir="ltr" id="msg" role="alert">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+            <div class="col-md-9 my-3">
+                <form action="{% url 'add_comment' slug=post.slug  %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.comment_text }}
+                    <div class="d-flex justify-content-center mt-3 login_container">
+                        <input class="btn btn-primary" type="submit" value="add comment">
+                    </div>
+                </form>
+            </div>
+        </div>
+{% endblock content %}

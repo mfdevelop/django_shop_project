@@ -1,0 +1,22 @@
+{% extends 'shop_managing_base.html' %}
+{% load widget_tweaks %}
+{% block title %}Add Shop{% endblock title %}
+{% block css_class_active_panel %}active{% endblock css_class_active_panel %}
+{% block body %}
+    <form action="{% url 'create_shop' %}" method="post">
+        {% csrf_token %}
+        <div class="form">
+            <p><span class="req">max 100 symbols</span>
+                <label>Shop Name<!--<span>(Required Field)</span>--></label>
+                {% render_field shop_form.name class+="placeholder col-12 bg-primary" %}
+{#                {{ shop_form.name | add_class:"placeholder col-12 bg-primary" }}#}
+            </p>
+            <p>
+                <label>Shop Type<!--<span>(Required Field)</span>--></label>
+                {% render_field shop_form.type class+="selectpicker" %}
+{#                {{ shop_form.type | add_class:"selectpicker" }}#}
+            </p>
+        </div>
+        <input class="btn btn-primary btn-lg" type="submit" value="add shop">
+    </form>
+{% endblock body %}
