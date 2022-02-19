@@ -26,7 +26,7 @@
                     {% for tag in tags%}
                         <tr>
 							<td>
-								<a href="#" class="user-link">{{ tag }}</a>
+								<a href="#" class="user-link list-group-item list-group-item-action list-group-item-warning">{{ tag }}</a>
 							</td>
 							<td style="width: 20%;">
 								<a href="{% url 'edit_tag' tag_id=tag.id %}" class="table-link">
@@ -52,6 +52,13 @@
 	</div>
 </div>
 </div>
+    <script>
+        setTimeout(function () {
+            if ($('#msg').length > 0) {
+                $('#msg').remove();
+            }
+        }, 2000)
+    </script>
 {% endblock content %}
 {% block style %}
     body{margin-top:20px;}

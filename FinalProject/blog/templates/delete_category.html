@@ -7,10 +7,11 @@
         <div class="col-md-19 my-3">
             <form action="{% url 'delete_category' id=category.id %}" method="post">
                 {% csrf_token %}
-                <p class="alert alert-warning">are you sure about deleting <span class="text-danger">{{ category.name }}</span> ?</p>
+                <p class="alert alert-warning col-md-8">are you sure about deleting <span class="text-danger">{{ category.name }}</span> Category ?</p>
                 {{ form.as_p }}
-                <input class="btn btn-success" type="submit" value="yes">
-                <a href="{%url 'categories_list' %}" class="btn btn-warning">return categories page</a>
+                <input class="btn btn-danger btn-sm col-md-5" type="submit" value="yes">
+                <br>
+                <p><a href="{%url 'categories_list' %}" class="btn btn-warning btn-sm col-md-2">return categories page</a></p>
             </form>
         </div>
     </div>

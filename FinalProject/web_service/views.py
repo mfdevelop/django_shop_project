@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import mixins, status
 from .serializers import *
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from kavenegar import *
 import random
 import time
@@ -25,12 +25,18 @@ class RegisterUser(GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
+        # auth_user = authenticate(phone_number=serializer.data['phone_number'], password=serializer.data['password'])
+        # print("%" * 100)
+        # print(auth_user)
+        # print("%" * 100)
         if serializer.is_valid():
             user = serializer.save()
             register_token = str(TokenObtainPairView.serializer_class.get_token(user).access_token)
+            # refresh_token = str(TokenRefreshView.serializer_class.refresh)
             return Response(
                 {"user": serializer.data,
-                 "token": register_token},
+                 "access_token": register_token,
+                 },
                 status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -43,10 +49,10 @@ class LoginUser(GenericAPIView):
         email = request.data.get('email', None)
         password = request.data.get('password', None)
         phone_number = request.data.get('phone_number', None)
-        user1 = get_object_or_404(CustomUser, phone_number=phone_number)
+        user1 = authenticate(phone_number=phone_number, password=password)
         if user1:
             if user1.password == password:
-                login(request, user1)
+                # login(request, user1)
                 login_token = str(TokenObtainPairView.serializer_class.get_token(user1).access_token)
                 return Response(login_token, status=status.HTTP_200_OK)
         return Response({"message": "invalid information"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -394,16 +400,18 @@ class VerifyPhoneNumberAndRegister(GenericAPIView, mixins.UpdateModelMixin):
     def post(self, request, *args, **kwargs):
         otp = request.data['otp']
         phone_number = request.data['phone_number']
-        user = get_object_or_404(CustomUser, phone_number=phone_number)
-        if user:
-            if redis.exists(phone_number):
-                if redis.get(phone_number) == otp:
-                    user.phone_number_verify = True
-                    user.save()
-                    return Response({"message": "phone number verified successfully"})
-                return Response({"message": "otp code not matched"}, status.HTTP_400_BAD_REQUEST)
-            return Response({"message": "otp code expired"}, status.HTTP_400_BAD_REQUEST)
-        return Response({"message": "phone number not recognized"}, status.HTTP_401_UNAUTHORIZED)
+        # user = get_object_or_404(CustomUser, phone_number=phone_number)
+        user = authenticate(phone_number=phone_number, otp=otp)
+        return user
+        # if user:
+        #     if redis.exists(phone_number):
+        #         if redis.get(phone_number) == otp:
+        #             user.phone_number_verify = True
+        #             user.save()
+        #             return Response({"message": "phone number verified successfully"})
+        #         return Response({"message": "otp code not matched"}, status.HTTP_400_BAD_REQUEST)
+        #     return Response({"message": "otp code expired"}, status.HTTP_400_BAD_REQUEST)
+        # return Response({"message": "phone number not recognized"}, status.HTTP_401_UNAUTHORIZED)
 
 
 class VerifyCodeForLogin(GenericAPIView, mixins.UpdateModelMixin):

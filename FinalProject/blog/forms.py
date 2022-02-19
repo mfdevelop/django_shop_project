@@ -11,6 +11,28 @@ class RegisterUserForm(UserCreationForm):
         fields = ['phone_number', 'email', 'password1', 'password2']
 
 
+class LoginUserForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['phone_number', 'password']
+
+
+# class ForgetPasswordForm(ModelForm):
+#     class Meta:
+#         model = CustomUser
+#         fields = ['phone_number', 'otp', 'password']
+
+class ForgetPasswordForm(forms.Form):
+    phone_number = forms.CharField()
+    password1 = forms.CharField()
+    password2 = forms.CharField()
+    otp = forms.CharField()
+
+
+class SendOtpForm(forms.Form):
+    phone_number = forms.CharField()
+
+
 class TagModelForm(ModelForm):
     class Meta:
         model = BlogPostTag

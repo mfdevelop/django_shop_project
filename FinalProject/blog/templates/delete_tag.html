@@ -14,10 +14,11 @@
         <div class="col-md-9 my-3">
             <form action="{% url 'delete_tag' tag_id=tag.id %}" method="post">
                 {% csrf_token %}
-                <p class="alert alert-warning">are you sure about deleting <span class="text-danger">{{ tag.name }}</span> ?</p>
+                <p class="alert alert-warning col-md-8">are you sure about deleting <span class="text-danger">{{ tag.name }}</span> ?</p>
                 {{ form.as_p }}
-                <input class="btn btn-success btn-lg" type="submit" value="yes">
-                <a href="{%url 'tags' %}" class="btn btn-warning btn-lg">return to tags page</a>
+                <input class="btn btn-danger btn-sm col-md-5" type="submit" value="yes">
+                <br>
+                <a href="{%url 'tags' %}" class="btn btn-warning btn-sm col-md-2">return to tags page</a>
             </form>
         </div>
     </div>

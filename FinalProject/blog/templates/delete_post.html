@@ -14,10 +14,10 @@
         <div class="col-md-9 my-3">
             <form action="{% url 'delete_post' slug=post.slug %}" method="post">
                 {% csrf_token %}
-                <p class="alert alert-warning">are you sure about deleting <span class="text-danger">{{ post.title }}</span> ?</p>
+                <p class="alert alert-warning col-md-8">are you sure about deleting <span class="text-danger">{{ post.title }}</span> ?</p>
                 {{ form.as_p }}
-                <input class="btn btn-success btn-lg" type="submit" value="yes">
-                <a href="{%url 'dashboard' %}" class="btn btn-warning btn-lg">return to dashboard</a>
+                <input class="btn btn-danger btn-sm col-md-5" type="submit" value="yes">
+                <a href="{%url 'dashboard' %}" class="btn btn-warning btn-sm col-md-2">return to dashboard</a>
             </form>
         </div>
     </div>

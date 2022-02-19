@@ -16,7 +16,7 @@ urlpatterns = [
     path('edit_post/<slug:slug>/', edit_post, name='edit_post'),
     path('delete_post/<slug:slug>/', delete_post_form, name='delete_post'),
     path('add_post/', login_required(AddPostView.as_view(), login_url='login'), name='add_post'),
-    path('add_comment/<slug:slug>', login_required(AddCommentView.as_view(), login_url='login'), name='add_comment'),
+    path('add_comment/<slug:slug>/', login_required(AddCommentView.as_view(), login_url='login'), name='add_comment'),
     path('edit_category/<int:id>/', edit_category, name='edit_category'),
     path('delete_tag/<int:tag_id>/', delete_tag_form, name='delete_tag'),
     path('delete_category/<int:id>/', delete_category_form, name='delete_category'),
@@ -25,4 +25,6 @@ urlpatterns = [
     path('post_categories/', Categories_list.as_view(), name='categories_list'),
     path('category_detail/<int:id>/', category_detail, name='category_detail'),
     path('search/', search, name='search'),
+    path('send_forget_sms/', SendForgetSms.as_view(), name='send_forget_sms'),
+    path('forget_password/', ForgetPasswordView.as_view(), name='forget_password'),
 ]

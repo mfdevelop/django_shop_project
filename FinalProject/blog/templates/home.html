@@ -2,6 +2,10 @@
 {% block title %}
 Home page
 {% endblock title %}
+{% block navbarlogs %}
+    <button type="button" class="btn btn-warning" href="{% url 'register' %}"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> signup</button>
+    <button type="button" class="btn btn-warning" href="{% url 'login' %}"><i class="glyphicon glyphicon-log-in" aria-hidden="true"></i> login</button>
+{% endblock navbarlogs %}
 {% block content%}
 {#<h1 class="page-title text-secondary">Home</h1>#}
 {#<a  class="col-md-12 btn btn-outline-warning my-2" href= "{% url 'posts' %}"><h3>Posts</h3></a>#}

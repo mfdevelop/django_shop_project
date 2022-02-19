@@ -1,34 +1,35 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-{{post.title}} comments
+    {{ post.title }} comments
 {% endblock title %}
 {% block content %}
-<section class="wrapper">
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert {{ message.tags }} m-2 text-center" dir="ltr" id="msg" role="alert">
-        {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-    <div class="container-fostrap">
-        <div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} m-2 text-center" dir="ltr" id="msg" role="alert">
+                {{ message }}
             </div>
-                <div class="content">
-                    <div class="container">
-                    <h1 class="header bg-primary col-md-12 text-danger">{{post.title}}</h1>
-                        <div class="row">
-                        {% for comment in comments %}
-                            <div class="col-md-7 my-4 ml-5 bg-light">
-                            {{comment.comment_text}}
-                            </div>
-                        {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <section class="wrapper">
+        <div class="container-fostrap">
+            <div class="container">
+                <h1 class="header bg-primary col-md-12 text-danger">{{ post.title }}</h1>
+                <div class="row">
+                    {% for comment in comments %}
+                        <div class="col-md-7 my-4 ml-5 bg-light">
+                            <h5 class="p-3 mb-2 bg-warning text-white"><p class="text-success">{{ comment.comment_text }}</p></h5>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+    <script>
+        setTimeout(function () {
+            if ($('#msg').length > 0) {
+                $('#msg').remove();
+            }
+        }, 2000)
+    </script>
 {% endblock content %}

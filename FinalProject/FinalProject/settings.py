@@ -197,6 +197,11 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'web_service.backends.CustomUserBackendPhonePass',
+    'web_service.backends.CustomUserBackendPhoneOtp',
+]
 # # Celery Configuration Options
 # BROKER_URL = 'redis://localhost:6379'
 # CELERY_ACCEPT_CONTENT = ['application/json']

@@ -26,3 +26,4 @@ class CustomUser(AbstractUser):
         if self.email:
             return self.email
         return str(self.phone_number)
+

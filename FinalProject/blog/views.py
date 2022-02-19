@@ -5,6 +5,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+import redis
+from kavenegar import *
+
+redis = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
 
 # Create your views here.
@@ -99,7 +103,7 @@ class AddTagView(View):
         tag_form = self.form(request.POST)
         if tag_form.is_valid():
             tag_form.save()
-            messages.success(request, f'تگ مورد نظر ذخیره گردید')
+            messages.success(request, f'new tag saved')
             return redirect(reverse('tags'))
 
 
@@ -119,7 +123,7 @@ class AddCommentView(View):
             comment.user = request.user
             comment.save()
             # comment_form.save()
-            messages.success(request, f'کامنت مورد نظر ذخیره گردید')
+            messages.success(request, f'comment saved')
             return redirect(reverse('post_comments', kwargs={'slug': kwargs['slug']}))
 
 
@@ -133,7 +137,7 @@ class AddCategoryView(View):
         category_form = self.form(request.POST)
         if category_form.is_valid():
             category_form.save()
-            messages.success(request, f'دسته بندی مورد نظر ذخیره گردید')
+            messages.success(request, f'category saved')
             return redirect(reverse('categories_list'))
 
 
@@ -150,7 +154,7 @@ class AddPostView(View):
         # post_form.user = self.request.user
         if post_form.is_valid():
             post_form.save()
-            messages.success(request, f'پست مورد نظر ذخیره گردید')
+            messages.success(request, f'new post saved')
             return redirect(reverse('dashboard'))
 
 
@@ -170,7 +174,7 @@ def delete_post(request, slug):
 
 def post_detail_page_render(request, slug):
     post = BlogPost.objects.get(slug=slug)
-    comments = post.comment_set.all()
+    comments = BlogPostComment.objects.filter(post=post)
     return render(request, "post_detail.html", {'post': post, 'comments': comments})
 
 
@@ -188,21 +192,21 @@ class Categories_list(ListView):
 
 def category_detail(request, id):
     category = BlogPostCategory.objects.get(id=id)
-    posts = category.post_set.all()
+    posts = BlogPost.objects.filter(category=category)
     return render(request, "category_details.html", {"category": category, "posts": posts})
 
 
 def register_user(request):
     if request.user.is_authenticated:
-        return render(request, "dashboard.html")
+        return dashboard_page_render
     else:
         form = RegisterUserForm()
         if request.method == "POST":
             form = RegisterUserForm(request.POST)
             if form.is_valid():
                 form.save()
-                username = form.cleaned_data.get('username')
-                messages.success(request, 'حساب شما با موفقیت ساخته شد' + username)
+                phone_number = form.cleaned_data.get('phone_number')
+                messages.success(request, 'your account registered successfully' + str(phone_number))
                 return redirect(reverse('login'))
         context = {'form': form}
         return render(request, 'register.html', context)
@@ -210,18 +214,20 @@ def register_user(request):
 
 def login_user(request):
     if request.user.is_authenticated:
-        return render(request, "dashboard.html")
+        return dashboard_page_render
     else:
+        form = LoginUserForm()
         if request.method == "POST":
-            username = request.POST.get('username')
+            form = RegisterUserForm(request.POST)
+            phone_number = request.POST.get('phone_number')
             password = request.POST.get('password')
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, phone_number=phone_number, password=password)
             if user is not None:
                 login(request, user)
                 return redirect(reverse('dashboard'))
             else:
-                messages.info(request, 'نام کاربری یا رمز عبور نادرست است')
-        context = {}
+                messages.info(request, 'invalid username')
+        context = {'form': form}
         return render(request, 'login.html', context)
 
 
@@ -269,3 +275,66 @@ def search(request):
         return render(request, 'search_resaults.html', {'searched': searched, 'posts': posts})
     else:
         return render(request, 'search_resaults.html', {})
+
+
+def random_generator():
+    return ''.join(str(random.randint(0, 9)) for _ in range(8))
+
+
+def redis_token_generator(phone_number):
+    otp = random_generator()
+    redis.psetex(phone_number, 300000, otp)
+    return otp
+
+
+def send_otp(mobile, otp):
+    body = {'receptor': mobile, 'token': otp, 'template': "verifyuser"}
+    sms_res = requests.get(
+        "https://api.kavenegar.com/v1/5145587872464647743632632B6438566C78456F7435786F4A47344F2F306C4C42595342656670393446453D/verify/lookup.json",
+        params=body)
+
+
+class SendForgetSms(View):
+    form = SendOtpForm
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'send_sms.html', {'form': self.form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form(self.request.POST)
+        if form.is_valid():
+            phone_number = self.request.POST.dict()['phone_number']
+            send_otp(mobile=phone_number, otp=redis_token_generator(phone_number))
+            return redirect(reverse('forget_password'))
+        return redirect(reverse('send_forget_sms'))
+
+
+class ForgetPasswordView(View):
+    form = ForgetPasswordForm
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'forget_password.html', {'form': self.form})
+
+    def post(self, request, *args, **kwargs):
+        final_form = self.form(self.request.POST)
+        if final_form.is_valid():
+            phone_number = self.request.POST.dict()['phone_number']
+            otp = self.request.POST.dict()['otp']
+            password1 = self.request.POST.dict()['password1']
+            password2 = self.request.POST.dict()['password2']
+            if CustomUser.objects.filter(phone_number=phone_number).exists():
+                user = CustomUser.objects.get(phone_number=phone_number)
+                if redis.exists(phone_number):
+                    if redis.get(phone_number) == otp:
+                        if password1 == password2:
+                            user.password = password1
+                            user.save()
+                            messages.info(request, "password changed successfully")
+                            return redirect(reverse('login'))
+                        else:
+                            messages.error(request, "passwords didn't matched!")
+                    else:
+                        messages.error(request, "disposable code is wrong")
+                else:
+                    messages.error(request, "disposable code has expired")
+        return redirect(reverse('forget_password'))

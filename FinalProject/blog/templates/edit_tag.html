@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block title %}
     edit tag
 {% endblock title %}
@@ -16,10 +17,10 @@
                     {% csrf_token %}
                     <h3 class="alert-warning">edit tag</h3>
                     <br>
-                        {{form.name}}
+                    <div class="col-md-8">{{ form.name|attr:"placeholder:Category Name"|add_class:"form-control-lg" }}</div>
                         <i class="fas fa-edit"></i>
                     <div class="d-flex justify-content-center mt-3 login_container">
-                        <input class="btn btn-primary " type="submit" value="edit tag">
+                        <input class="btn btn-primary btn-sm col-md-5" type="submit" value="edit tag">
                     </div>
                 </form>
             </div>
